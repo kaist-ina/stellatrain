@@ -1,0 +1,23 @@
+[submodule "backend/pybind11"]
+	path = backend/pybind11
+	url = https://github.com/pybind/pybind11
+	branch = v2.11.1
+[submodule "backend/libzmq"]
+	path = backend/libzmq
+	url = https://github.com/zeromq/libzmq
+	branch = v4.3.5
+[submodule "backend/cppzmq"]
+	path = backend/cppzmq
+	url = https://github.com/zeromq/cppzmq
+	branch = v4.10.0
+[submodule "backend/protobuf"]
+	path = backend/protobuf
+	url = https://github.com/protocolbuffers/protobuf
+	branch = v25.2
+[submodule "backend/json"]
+	path = backend/json
+  	url = https://github.com/nlohmann/json
+  	branch = v3.11.3
+[submodule "backend/scikit-optimize"]
+	path = backend/scikit-optimize
+	url = https://github.com/kaist-ina/scikit-optimize-stellatrain

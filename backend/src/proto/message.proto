@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package fasterdp;
+
+message TrainConfig {
+    uint32 ubatch_size = 1;
+    uint32 gradient_accumulation = 2;
+    float compression_rate = 3;
+}
+
+message Measurements {
+    float grad_send_thpt_mbps = 1;
+    float grad_recv_thpt_mbps = 2;
+    float fwd_delay_ms = 3;
+    float bwd_delay_ms = 4;
+    float bwd_fwd_gap_ms = 5;
+    float intra_fwd_gap_ms = 6;
+}
+
+message GlobalTelemetryInit {
+    uint32 num_nodes = 1;
+    uint32 num_gpus = 2;
+    repeated uint32 param_counts = 3;
+    
+    bool grad_fp16 = 4;
+    bool grad_idx_u16 = 5;
+}
+
+
+message LocalTelemetryInit {
+    uint32 client_id = 1;
+    uint32 rank = 2;
+    string gpu_name = 3;
+    uint32 local_rank = 4;
+    uint32 local_world_size = 5;
+    uint32 max_batch_size = 6;
+}
+
+message Telemetry {
+    uint32 client_id = 1;
+    uint32 message_id = 2;
+    uint32 uiter_count = 3;
+
+    TrainConfig config = 4;
+    Measurements measurements = 5;
+}
+
+message Instruction {
+    uint32 client_id = 1;
+    uint32 message_id = 2;
+    uint32 effective_since_uiter = 3;
+    bool valid = 4;
+
+    TrainConfig config = 5;
+}
+
+message Request {
+    enum Type {
+        INVALID = 0;
+        INIT = 1;
+        GLOBAL_TELEMETRY_INIT = 2;
+        LOCAL_TELEMETRY_INIT = 3;
+        LOCAL_TELEMETRY = 4;
+        TERMINATE = 5;
+    }
+
+    Type type = 1;
+
+    oneof payload {
+        GlobalTelemetryInit global_telemetry_init = 2;
+        LocalTelemetryInit local_telemetry_init = 3;
+        Telemetry telemetry = 4;
+    }
+}
+
+message Response {
+    enum Type {
+        INVALID = 0;
+        OK = 1;
+        INSTRUCTION = 2;
+    }
+
+    Type type = 1; 
+
+    oneof payload {
+        Instruction instruction = 2;
+    }
+}
